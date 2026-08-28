@@ -7,6 +7,7 @@ import {
   Building2,
   Baby,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const LandingHero = () => {
   return (
@@ -64,7 +65,8 @@ const LandingHero = () => {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <button
+                <Link
+                to="/login"
                   type="button"
                   className="group flex h-12 items-center justify-center gap-2 rounded-lg bg-[#00656B] px-7 text-sm font-bold text-white shadow-[0_8px_25px_rgba(0,101,107,0.18)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#00555A] hover:shadow-[0_12px_30px_rgba(0,101,107,0.22)] active:translate-y-0 cursor-pointer"
                 >
@@ -74,7 +76,7 @@ const LandingHero = () => {
                     strokeWidth={2.2}
                     className="transition-transform duration-200 group-hover:translate-x-1"
                   />
-                </button>
+                </Link>
               </div>
 
               <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">

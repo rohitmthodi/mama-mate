@@ -14,12 +14,13 @@
 
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./components/landing-page/LandingPage";
+import Login from "./auth/login/Login";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 };

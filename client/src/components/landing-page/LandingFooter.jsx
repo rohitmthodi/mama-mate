@@ -1,5 +1,5 @@
 import React from "react";
-import { HeartPulse, UsersRound, Baby } from "lucide-react";
+import { HeartPulse, Handshake, Baby } from "lucide-react";
 
 const LandingFooter = () => {
   return (
@@ -44,7 +44,7 @@ const LandingFooter = () => {
           {/* Connected Teams */}
           <div className="flex items-center gap-4 px-0 py-6 sm:px-6 lg:px-10">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E8F5F5]">
-              <UsersRound size={18} className="text-[#00656B]" />
+              <Handshake size={18} className="text-[#00656B]" />
             </div>
 
             <div>
