@@ -1,15 +1,58 @@
 import { useState } from "react";
-import {
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-  ShieldCheck,
-  ArrowRight,
-} from "lucide-react";
+import { Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, ArrowRight } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm = () => {
+  const { login } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [searchParams] = useSearchParams();
+  const role = searchParams.get("role");
+  const isMother = role === "mother";
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        "http://localhost:2000/api/auth/login",
+        formData,
+      );
+
+      login(
+        response.data.user,
+        response.data.token
+      )
+
+      console.log("Login response:", response.data);
+    } catch (error) {
+      setError(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex w-full items-center justify-center bg-white px-6 py-10 sm:px-10 lg:w-1/2 lg:px-12 xl:px-20 cursor-default">
@@ -39,7 +82,7 @@ const LoginForm = () => {
             Authorized access only
           </div>
 
-          <form className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
               <label
@@ -58,9 +101,12 @@ const LoginForm = () => {
 
                 <input
                   id="email"
-                  type="email"
-                  placeholder="admin@kerala.gov.in"
-                  className="h-11 w-full rounded-md border border-gray-200 bg-white pl-10 pr-3 text-sm font-medium text-gray-700 outline-none transition-all placeholder:text-gray-400 focus:border-[#00656B] focus:ring-2 focus:ring-[#00656B]/10"
+                  type="text"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email or username"
+                  className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
                 />
               </div>
             </div>
@@ -75,23 +121,29 @@ const LoginForm = () => {
               </label>
 
               <div className="relative">
+                {/* Lock Icon */}
                 <LockKeyhole
                   size={17}
                   strokeWidth={1.8}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                 />
 
+                {/* Password Input */}
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="h-11 w-full rounded-md border border-gray-200 bg-white pl-10 pr-11 text-sm font-medium text-gray-700 outline-none transition-all placeholder:text-gray-400 focus:border-[#00656B] focus:ring-2 focus:ring-[#00656B]/10"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-10 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
                 />
 
+                {/* Show / Hide Password */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-[#00656B] cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 outline-none transition-colors hover:text-primary"
                 >
                   {showPassword ? (
                     <EyeOff size={17} strokeWidth={1.8} />
@@ -107,31 +159,52 @@ const LoginForm = () => {
               <label className="flex font-bold cursor-pointer items-center gap-2 text-xs text-gray-500">
                 <input
                   type="checkbox"
-                  className="h-3.5 w-3.5 rounded border-gray-300 accent-[#00656B] cursor-pointer"
+                  className="h-3.5 w-3.5 rounded border-gray-300 accent-primary cursor-pointer outline-none"
                 />
                 Remember me
               </label>
 
               <button
                 type="button"
-                className="text-xs font-bold text-[#00656B] hover:underline cursor-pointer"
+                className="text-xs font-bold text-primary hover:underline cursor-pointer outline-none"
               >
                 Forgot password?
               </button>
             </div>
 
+            {error && (
+              <div className="rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+                {error}
+              </div>
+            )}
+
             {/* Login Button */}
             <button
               type="submit"
-              className="group flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#00656B] text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#00555A] hover:shadow-md active:scale-[0.99]"
+              disabled={loading}
+              className="group flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#00656B] text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-secondary hover:shadow-md active:scale-[0.99] outline-none"
             >
-              Login to Portal
+              {loading ? "Loging in..." : "Log In"}
               <ArrowRight
                 size={17}
                 strokeWidth={2}
                 className="transition-transform duration-200 group-hover:translate-x-1"
               />
             </button>
+            {isMother && (
+              <div className="pt-2 text-center">
+                <span className="text-xs font-medium text-gray-400">
+                  New to Mama Mate?{" "}
+                </span>
+
+                <Link
+                  to="/register"
+                  className="text-xs font-bold text-primary hover:underline outline-none"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </form>
         </div>
 
@@ -142,19 +215,19 @@ const LoginForm = () => {
           </p>
 
           <div className="mt-2 flex items-center justify-center gap-2 text-xs text-gray-400">
-            <button className="hover:text-[#00656B] cursor-pointer">
+            <button className="hover:text-primary cursor-pointer outline-none">
               Help Desk
             </button>
 
             <span>•</span>
 
-            <button className="hover:text-[#00656B] cursor-pointer">
+            <button className="hover:text-primary cursor-pointer outline-none">
               Terms of Use
             </button>
 
             <span>•</span>
 
-            <button className="hover:text-[#00656B] cursor-pointer">
+            <button className="hover:text-primary cursor-pointer outline-none">
               Privacy Policy
             </button>
           </div>

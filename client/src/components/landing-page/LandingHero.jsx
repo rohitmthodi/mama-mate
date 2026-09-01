@@ -66,9 +66,9 @@ const LandingHero = () => {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                to="/login"
+                to="/role"
                   type="button"
-                  className="group flex h-12 items-center justify-center gap-2 rounded-lg bg-[#00656B] px-7 text-sm font-bold text-white shadow-[0_8px_25px_rgba(0,101,107,0.18)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#00555A] hover:shadow-[0_12px_30px_rgba(0,101,107,0.22)] active:translate-y-0 cursor-pointer"
+                  className="group flex h-12 items-center justify-center gap-2 rounded-lg bg-primary px-7 text-sm font-bold text-white shadow-[0_8px_25px_rgba(0,101,107,0.18)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:shadow-[0_12px_30px_rgba(0,101,107,0.22)] active:translate-y-0 cursor-pointer outline-none"
                 >
                   Get Started
                   <ArrowRight

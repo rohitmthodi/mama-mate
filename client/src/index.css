@@ -14,4 +14,15 @@ body {
 
   /* COLORS */
   --color-primary: #006d77;
+  --color-secondary: #00555a;
+  --color-bg: #e2f3f3;
+}
+
+/* HIDE SCROLL BAR */
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }

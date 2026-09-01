@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
 import connectDB from "./config/db.js";
+
+import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +20,8 @@ app.get("/", (req, res) => {
     message: "Mama Mate API is running",
   });
 });
+
+app.use("/api/auth", authRouter);
 
 const PORT = process.env.PORT || 5000;
 
