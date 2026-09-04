@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import {
   User,
   Mail,
@@ -12,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { registerMother } from "../../services/authService"; 
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -38,36 +38,35 @@ const RegisterForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
-    setSuccess("");
+  setError("");
+  setSuccess("");
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:2000/api/auth/register",
-        formData,
-      );
+    const response = await registerMother(formData);
 
-      setSuccess(response.data.message);
+    setSuccess(response.message);
 
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        mobile: "",
-        panchayat: "",
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (error) {
-      setError(error.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      panchayat: "",
+      password: "",
+      confirmPassword: "",
+    });
+  } catch (error) {
+    setError(
+      error.response?.data?.message || "Registration failed",
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="overflow-y-auto px-6 py-5 sm:px-10 sm:py-6">
@@ -287,11 +286,11 @@ const RegisterForm = () => {
                 />
 
                 <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary outline-none cursor-pointer"
-                >
-                  <Eye size={16} />
-                </button>
+  type="button"
+  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary outline-none cursor-pointer"
+>
+  <Eye size={16} />
+</button>
               </div>
             </div>
           </div>
