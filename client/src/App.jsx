@@ -7,41 +7,44 @@ import Login from "./auth/login/Login";
 import Register from "./auth/register/Register";
 
 import Unauthorized from "./pages/Unauthorized";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import AppLayout from "./layouts/AppLayout";
+
 import Profile from "./pages/Profile";
 
-import ProtectedRoute from "./auth/ProtectedRoute";
 import RoleRoute from "./auth/RoleRoute";
 
-import MotherDashboard from "./dashboards/MotherDashboard";
-import AppLayout from "./layouts/AppLayout";
+import MotherDashboard from "./dashboards/mother/MotherDashboard";
+import MyHealth from "./dashboards/mother/MyHealth";
+import PrenatalTracking from "./dashboards/mother/PrenatalTracking";
+import Immunizations from "./dashboards/mother/Immunizations";
+import Exercises from "./dashboards/mother/Exercises";
+import Complaints from "./dashboards/mother/Complaints";
 
 const App = () => {
   return (
     <Routes>
       {/* Public Routes */}
-
       <Route path="/" element={<LandingPage />} />
-
       <Route path="/role" element={<RoleSelection />} />
-
       <Route path="/login" element={<Login />} />
-
       <Route path="/register" element={<Register />} />
-
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* Protected Routes */}
-
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           {/* Common Pages */}
-
           <Route path="/profile" element={<Profile />} />
 
           {/* Mother Routes */}
-
           <Route element={<RoleRoute allowedRoles={["mother"]} />}>
             <Route path="/mother/dashboard" element={<MotherDashboard />} />
+            <Route path="/mother/my-health" element={<MyHealth />} />
+            <Route path="/mother/prenatal-tracking" element={<PrenatalTracking />} />
+            <Route path="/mother/immunizations" element={<Immunizations />} />
+            <Route path="/mother/exercises" element={<Exercises />} />
+            <Route path="/mother/complaints" element={<Complaints />} />
           </Route>
         </Route>
       </Route>
