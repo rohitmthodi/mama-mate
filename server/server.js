@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
 import authRouter from "./routes/authRoutes.js";
+import motherHealthRouter from "./routes/motherHealthRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/mother-health", motherHealthRouter)
 
 const PORT = process.env.PORT || 5000;
 

@@ -11,7 +11,7 @@ const MotherDashboard = () => {
 
       <div>
         <h1 className="text-3xl font-bold text-gray-800">
-          Welcome, {user?.firstName || "there"} 👋
+          Welcome, {user?.firstName || "there"}!👩🏼‍🦰
         </h1>
 
         <p className="mt-2 text-sm text-gray-500">
@@ -24,7 +24,7 @@ const MotherDashboard = () => {
       <div className="grid gap-5 md:grid-cols-3">
         {/* Appointments */}
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="rounded-2xl bg-bg border border-cyan-500/15 p-6 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Appointments</p>
@@ -42,7 +42,7 @@ const MotherDashboard = () => {
 
         {/* Health Status */}
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="rounded-2xl bg-bg border border-cyan-500/15 p-6 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Health Status</p>
@@ -62,7 +62,7 @@ const MotherDashboard = () => {
 
         {/* Records */}
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="rounded-2xl bg-bg border border-cyan-500/15 p-6 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">
@@ -84,9 +84,8 @@ const MotherDashboard = () => {
       </div>
 
       {/* Upcoming Appointments */}
-
-      <div className="rounded-2xl border bg-white shadow-sm">
-        <div className="flex items-center justify-between border-b px-6 py-5">
+      <div className="rounded-2xl border border-cyan-500/15 bg-bg shadow-sm">
+        <div className="flex items-center justify-between border-b border-black/40 px-6 py-5">
           <div>
             <h2 className="text-lg font-semibold text-gray-800">
               Upcoming Appointments
@@ -107,7 +106,6 @@ const MotherDashboard = () => {
         </div>
 
         {/* Empty State */}
-
         <div className="flex min-h-52 flex-col items-center justify-center px-6 text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E8F5F5] text-[#00656B]">
             <CalendarDays size={25} />
