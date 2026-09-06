@@ -3,6 +3,7 @@ import express from "express";
 import {
   createMotherHealth,
   getMotherHealth,
+  updateMotherHealth,
 } from "../controllers/motherHealthController.js";
 
 import authMiddleware from "../middlewares/authMiddleware.js";
@@ -22,6 +23,13 @@ motherHealthRouter.get(
   authMiddleware,
   roleMiddleware("mother"),
   getMotherHealth,
+);
+
+motherHealthRouter.put(
+  "/",
+  authMiddleware,
+  roleMiddleware("mother"),
+  updateMotherHealth,
 );
 
 export default motherHealthRouter;
