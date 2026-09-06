@@ -5,13 +5,25 @@ const navigation = {
       path: "/mother/dashboard",
     },
     {
-      label: "My Profile",
-      path: "/mother/profile",
+      label: "Health Records",
+      path: "/mother/health-records",
     },
     {
-      label: "Appointments",
-      path: "/mother/appointments",
+      label: "Prenatal Tracking",
+      path: "/mother/prenatal-tracking",
     },
+    {
+      label: "immunizations",
+      path: "/mother/immunizations",
+    },
+    {
+      label: "Schemes",
+      path: "/mother/schemes",
+    },
+    {
+      label: "Complaints",
+      path: "/mother/complaints",
+    }
   ],
 
   admin: [
@@ -35,12 +47,20 @@ const navigation = {
       path: "/panchayat/dashboard",
     },
     {
-      label: "Mothers",
-      path: "/panchayat/mothers",
+      label: "My Panchayat",
+      path: "/panchayat/my-panchayat",
     },
     {
-      label: "Reports",
-      path: "/panchayat/reports",
+      label: "Asha Workers",
+      path: "/panchayat/asha-workers",
+    },
+    {
+      label: "Government Schemes",
+      path: "/panchayat/government-Schemes",
+    },
+    {
+      label: "Complaints",
+      path: "/panchayat/complaints",
     },
   ],
 
