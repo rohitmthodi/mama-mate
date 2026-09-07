@@ -97,7 +97,7 @@ const handleSubmit = async (e) => {
         {/* Login Card */}
         <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] sm:p-6">
           {/* Authorized Access */}
-          <div className="mb-6 flex items-center justify-center gap-2 rounded-md border border-red-100 bg-red-50 px-3 py-2 text-xs font-bold text-red-600">
+          <div className="mb-6 flex items-center justify-center gap-2 rounded-md border border-yellow-500/10 bg-yellow-50 px-3 py-2 text-xs font-bold text-yellow-700 animate-pulse">
             <ShieldCheck size={14} />
             Authorized access only
           </div>

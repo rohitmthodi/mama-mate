@@ -15,7 +15,7 @@ import Profile from "./pages/Profile";
 import RoleRoute from "./auth/RoleRoute";
 
 import MotherDashboard from "./dashboards/mother/MotherDashboard";
-import MyHealth from "./dashboards/mother/MyHealth";
+import MyHealth from "./dashboards/mother/my-health/MyHealth";
 import PrenatalTracking from "./dashboards/mother/PrenatalTracking";
 import Immunizations from "./dashboards/mother/Immunizations";
 import Exercises from "./dashboards/mother/Exercises";

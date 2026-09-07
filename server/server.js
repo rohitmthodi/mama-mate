@@ -6,6 +6,8 @@ import connectDB from "./config/db.js";
 
 import authRouter from "./routes/authRoutes.js";
 import motherHealthRouter from "./routes/motherHealthRoutes.js";
+import pregnancyRouter from "./routes/pregnancyRoutes.js";
+import prenatalRouter from "./routes/prenatalRoutes.js";
 
 dotenv.config();
 
@@ -23,7 +25,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/mother-health", motherHealthRouter)
+app.use("/api/mother-health", motherHealthRouter);
+app.use("/api/pregnancy", pregnancyRouter);
+app.use("/api/prenatal", prenatalRouter);
 
 const PORT = process.env.PORT || 5000;
 
