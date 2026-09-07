@@ -26,12 +26,12 @@ export const getPrenatalTracking = async (req, res) => {
 
     const differenceInMilliseconds = today - lmp;
 
-    const totalDays = Math.floor(
-      differenceInMilliseconds / (1000 * 60 * 60 * 24),
+    const totalDays = Math.max(
+      0,
+      Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24)),
     );
 
     const pregnancyWeek = Math.floor(totalDays / 7);
-
     const remainingDays = totalDays % 7;
 
     return res.status(200).json({

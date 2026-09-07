@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Baby,
-  CalendarDays,
-  HeartPulse,
-  Clock3,
-  Pencil,
-} from "lucide-react";
+import { Baby, CalendarDays, HeartPulse, Clock3, Pencil } from "lucide-react";
 
 import api from "../../../services/api.js";
 import EditPregnancyForm from "./EditPregnancyForm";
@@ -25,32 +19,28 @@ const PrenatalTracking = () => {
     notes: "",
   });
 
-  useEffect(() => {
-    const fetchPrenatalTracking = async () => {
-      try {
-        const response = await api.get("/prenatal");
+  const fetchPrenatalTracking = async () => {
+    try {
+      const response = await api.get("/prenatal");
 
-        console.log(
-          "Prenatal API Response:",
-          response.data,
-        );
+      console.log("Prenatal API Response:", response.data);
 
-        setPrenatal(response.data.prenatal);
-      } catch (error) {
-        console.error("Fetch Prenatal Error:", error);
+      setPrenatal(response.data.prenatal);
+      setError("");
+    } catch (error) {
+      console.error("Fetch Prenatal Error:", error);
 
-        if (error.response?.status === 404) {
-          setError("No active pregnancy record found.");
-        } else {
-          setError(
-            "Unable to load your prenatal information.",
-          );
-        }
-      } finally {
-        setLoading(false);
+      if (error.response?.status === 404) {
+        setError("No active pregnancy record found.");
+      } else {
+        setError("Unable to load your prenatal information.");
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchPrenatalTracking();
   }, []);
 
@@ -86,12 +76,9 @@ const PrenatalTracking = () => {
       setError("");
 
       const response = await api.put("/pregnancy", {
-        lastMenstrualPeriod:
-          formData.lastMenstrualPeriod,
+        lastMenstrualPeriod: formData.lastMenstrualPeriod,
 
-        pregnancyNumber: Number(
-          formData.pregnancyNumber,
-        ),
+        pregnancyNumber: Number(formData.pregnancyNumber),
 
         previousBirths: formData.previousBirths
           ? Number(formData.previousBirths)
@@ -100,42 +87,64 @@ const PrenatalTracking = () => {
         notes: formData.notes,
       });
 
-      console.log(
-        "Pregnancy Update Response:",
-        response.data,
-      );
+      console.log("Pregnancy Update Response:", response.data);
 
-      const updatedPregnancy =
-        response.data.pregnancy;
+      const updatedPregnancy = response.data.pregnancy;
 
       setPrenatal((prev) => ({
         ...prev,
 
-        lastMenstrualPeriod:
-          updatedPregnancy.lastMenstrualPeriod,
+        lastMenstrualPeriod: updatedPregnancy.lastMenstrualPeriod,
 
-        expectedDeliveryDate:
-          updatedPregnancy.expectedDeliveryDate,
+        expectedDeliveryDate: updatedPregnancy.expectedDeliveryDate,
 
-        pregnancyNumber:
-          updatedPregnancy.pregnancyNumber,
+        pregnancyNumber: updatedPregnancy.pregnancyNumber,
 
-        previousBirths:
-          updatedPregnancy.previousBirths,
+        previousBirths: updatedPregnancy.previousBirths,
 
         notes: updatedPregnancy.notes,
       }));
 
       setIsEditing(false);
     } catch (error) {
-      console.error(
-        "Update Pregnancy Error:",
-        error,
-      );
+      console.error("Update Pregnancy Error:", error);
 
       setError(
         error.response?.data?.message ||
           "Unable to update your pregnancy information.",
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+
+    try {
+      setSaving(true);
+      setError("");
+
+      const response = await api.post("/pregnancy", {
+        lastMenstrualPeriod: formData.lastMenstrualPeriod,
+        pregnancyNumber: Number(formData.pregnancyNumber),
+        previousBirths: formData.previousBirths
+          ? Number(formData.previousBirths)
+          : 0,
+        notes: formData.notes,
+      });
+
+      console.log("Pregnancy Create Response:", response.data);
+
+      await fetchPrenatalTracking();
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Create Pregnancy Error:", error);
+
+      setError(
+        error.response?.data?.message ||
+          "Unable to create your pregnancy record.",
       );
     } finally {
       setSaving(false);
@@ -154,21 +163,50 @@ const PrenatalTracking = () => {
 
   if (error && !isEditing) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border bg-white px-6 text-center shadow-sm">
-        <Baby
-          size={42}
-          className="text-[#00656B]"
-        />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+            Prenatal Tracking
+          </h1>
 
-        <h2 className="mt-4 text-xl font-bold text-gray-800">
-          {error}
-        </h2>
+          <p className="mt-2 text-sm font-medium text-gray-500">
+            Start tracking your pregnancy by adding your pregnancy information.
+          </p>
+        </div>
 
-        <p className="mt-2 max-w-md text-sm font-medium text-gray-500">
-          Your prenatal tracking information will
-          appear here once an active pregnancy record
-          is available.
-        </p>
+        <div className="rounded-2xl border bg-white p-6 shadow-sm sm:p-8">
+          <div className="mx-auto max-w-xl text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#E8F5F5] text-[#00656B]">
+              <Baby size={32} />
+            </div>
+
+            <h2 className="mt-5 text-xl font-bold text-gray-800">
+              No Active Pregnancy
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-gray-500">
+              Add your pregnancy information to start tracking your pregnancy
+              progress, important dates, and other details.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                setError("");
+                setFormData({
+                  lastMenstrualPeriod: "",
+                  pregnancyNumber: "",
+                  previousBirths: "",
+                  notes: "",
+                });
+                setIsEditing(true);
+              }}
+              className="mt-6 cursor-pointer rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-secondary"
+            >
+              Add Pregnancy
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -180,7 +218,7 @@ const PrenatalTracking = () => {
         error={error}
         saving={saving}
         handleChange={handleChange}
-        handleUpdate={handleUpdate}
+        handleUpdate={prenatal ? handleUpdate : handleCreate}
         setIsEditing={setIsEditing}
       />
     );
@@ -196,8 +234,7 @@ const PrenatalTracking = () => {
           </h1>
 
           <p className="mt-2 text-sm font-medium text-gray-500">
-            Track your pregnancy progress and important
-            dates.
+            Track your pregnancy progress and important dates.
           </p>
         </div>
 
@@ -224,33 +261,51 @@ const PrenatalTracking = () => {
             </p>
 
             <h2 className="mt-1 text-3xl font-bold text-gray-800">
-              Week {prenatal.pregnancyWeek}
+              {prenatal.pregnancyWeek} weeks {prenatal.remainingDays} days
             </h2>
 
             <p className="mt-1 text-sm text-gray-500">
-              {prenatal.remainingDays} days into the
-              current week
+              Pregnancy progress toward 40 weeks
             </p>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="mt-6">
-          <div className="mb-2 flex items-center justify-between text-xs font-semibold text-gray-500">
-            <span>Week 1</span>
-            <span>Week 40</span>
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-gray-700">
+              Pregnancy Progress
+            </h3>
+
+            <span className="rounded-full bg-[#E8F5F5] px-3 py-1 text-sm font-bold text-[#00656B]">
+              {Math.min(
+                ((prenatal.pregnancyWeek + prenatal.remainingDays / 7) / 40) *
+                  100,
+                100,
+              ).toFixed(1)}
+              %
+            </span>
           </div>
 
-          <div className="h-3 overflow-hidden rounded-full bg-gray-100">
-            <div
-              className="h-full rounded-full bg-[#00656B] transition-all duration-500"
-              style={{
-                width: `${Math.min(
-                  (prenatal.pregnancyWeek / 40) * 100,
-                  100,
-                )}%`,
-              }}
-            />
+          <div className="mt-5">
+            <div className="h-3 overflow-hidden rounded-full bg-gray-100">
+              <div
+                className="h-full rounded-full bg-[#00656B] transition-all duration-500"
+                style={{
+                  width: `${Math.min(
+                    ((prenatal.pregnancyWeek + prenatal.remainingDays / 7) /
+                      40) *
+                      100,
+                    100,
+                  )}%`,
+                }}
+              />
+            </div>
+
+            <div className="mt-2 flex items-center justify-between text-xs font-medium text-gray-400">
+              <span>Week 1</span>
+              <span>Week 40</span>
+            </div>
           </div>
         </div>
       </div>
@@ -269,20 +324,18 @@ const PrenatalTracking = () => {
                 Last Menstrual Period
               </p>
 
-              <CalendarDays
-                size={20}
-                className="text-[#00656B]"
-              />
+              <CalendarDays size={20} className="text-[#00656B]" />
             </div>
 
             <h3 className="mt-3 text-lg font-bold text-gray-800">
-              {new Date(
-                prenatal.lastMenstrualPeriod,
-              ).toLocaleDateString("en-IN", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
+              {new Date(prenatal.lastMenstrualPeriod).toLocaleDateString(
+                "en-IN",
+                {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                },
+              )}
             </h3>
           </div>
 
@@ -293,20 +346,18 @@ const PrenatalTracking = () => {
                 Expected Delivery
               </p>
 
-              <HeartPulse
-                size={20}
-                className="text-[#00656B]"
-              />
+              <HeartPulse size={20} className="text-[#00656B]" />
             </div>
 
             <h3 className="mt-3 text-lg font-bold text-gray-800">
-              {new Date(
-                prenatal.expectedDeliveryDate,
-              ).toLocaleDateString("en-IN", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
+              {new Date(prenatal.expectedDeliveryDate).toLocaleDateString(
+                "en-IN",
+                {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                },
+              )}
             </h3>
           </div>
 
@@ -317,10 +368,7 @@ const PrenatalTracking = () => {
                 Pregnancy Number
               </p>
 
-              <Clock3
-                size={20}
-                className="text-[#00656B]"
-              />
+              <Clock3 size={20} className="text-[#00656B]" />
             </div>
 
             <h3 className="mt-3 text-lg font-bold text-gray-800">
@@ -338,9 +386,7 @@ const PrenatalTracking = () => {
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-500">
-              Previous Births
-            </p>
+            <p className="text-sm font-medium text-gray-500">Previous Births</p>
 
             <p className="mt-1 text-lg font-bold text-gray-800">
               {prenatal.previousBirths}
@@ -352,9 +398,7 @@ const PrenatalTracking = () => {
       {/* Notes */}
       {prenatal.notes && (
         <div className="rounded-2xl border bg-white p-5 shadow-sm sm:p-6">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Notes
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-800">Notes</h2>
 
           <p className="mt-2 text-sm leading-6 text-gray-500">
             {prenatal.notes}
