@@ -3,6 +3,7 @@ import express from "express";
 import {
   createPregnancy,
   getPregnancy,
+  updatePregnancy,
 } from "../controllers/pregnancyController.js";
 
 import authMiddleware from "../middlewares/authMiddleware.js";
@@ -22,6 +23,13 @@ pregnancyRouter.get(
   authMiddleware,
   roleMiddleware("mother"),
   getPregnancy,
+);
+
+pregnancyRouter.put(
+  "/",
+  authMiddleware,
+  roleMiddleware("mother"),
+  updatePregnancy,
 );
 
 export default pregnancyRouter;

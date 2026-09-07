@@ -21,9 +21,6 @@ export const createMotherHealth = async (req, res) => {
     }
 
     const {
-      isPregnant,
-      pregnancyWeek,
-      expectedDeliveryDate,
       bloodGroup,
       weight,
       bloodPressure,
@@ -32,9 +29,6 @@ export const createMotherHealth = async (req, res) => {
 
     const health = await MotherHealth.create({
       mother: motherId,
-      isPregnant,
-      pregnancyWeek,
-      expectedDeliveryDate,
       bloodGroup,
       weight,
       bloodPressure,
@@ -53,7 +47,6 @@ export const createMotherHealth = async (req, res) => {
     });
   }
 };
-
 
 export const getMotherHealth = async (req, res) => {
   try {
@@ -88,7 +81,6 @@ export const getMotherHealth = async (req, res) => {
   }
 };
 
-
 export const updateMotherHealth = async (req, res) => {
   try {
     const motherId = req.user.userId;
@@ -100,9 +92,6 @@ export const updateMotherHealth = async (req, res) => {
     }
 
     const {
-      isPregnant,
-      pregnancyWeek,
-      expectedDeliveryDate,
       bloodGroup,
       weight,
       bloodPressure,
@@ -112,9 +101,6 @@ export const updateMotherHealth = async (req, res) => {
     const health = await MotherHealth.findOneAndUpdate(
       { mother: motherId },
       {
-        isPregnant,
-        pregnancyWeek,
-        expectedDeliveryDate,
         bloodGroup,
         weight,
         bloodPressure,

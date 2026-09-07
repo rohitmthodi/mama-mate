@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 
-const EditHealthForm = ({
+const EditPregnancyForm = ({
   formData,
   error,
   saving,
@@ -13,14 +13,15 @@ const EditHealthForm = ({
       onSubmit={handleUpdate}
       className="rounded-2xl bg-white p-5 shadow-sm sm:p-6"
     >
+      {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-gray-800">
-            Edit Health Information
+            Edit Pregnancy Information
           </h2>
 
           <p className="mt-1 text-sm font-medium text-gray-500">
-            Update your current health information.
+            Update your pregnancy information.
           </p>
         </div>
 
@@ -34,6 +35,7 @@ const EditHealthForm = ({
         </button>
       </div>
 
+      {/* Error */}
       {error && (
         <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
           {error}
@@ -41,79 +43,68 @@ const EditHealthForm = ({
       )}
 
       <div className="grid gap-5 sm:grid-cols-2">
-        {/* Blood Group */}
+        {/* Last Menstrual Period */}
         <div>
           <label className="mb-2 block text-sm font-bold text-gray-700">
-            Blood Group
-          </label>
-
-          <select
-            name="bloodGroup"
-            value={formData.bloodGroup}
-            onChange={handleChange}
-            className="w-full rounded-xl bg-bg px-4 py-3 text-sm font-medium outline-none"
-          >
-            <option value="">Select blood group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
-
-        {/* Weight */}
-        <div>
-          <label className="mb-2 block text-sm font-bold text-gray-700">
-            Weight (kg)
+            Last Menstrual Period
           </label>
 
           <input
-            type="number"
-            name="weight"
-            min="0"
-            step="0.1"
-            value={formData.weight}
+            type="date"
+            name="lastMenstrualPeriod"
+            value={formData.lastMenstrualPeriod}
             onChange={handleChange}
-            placeholder="e.g. 62"
             className="w-full rounded-xl bg-bg px-4 py-3 text-sm font-medium outline-none"
           />
         </div>
 
-        {/* Blood Pressure */}
+        {/* Pregnancy Number */}
         <div>
           <label className="mb-2 block text-sm font-bold text-gray-700">
-            Blood Pressure
-          </label>
-
-          <input
-            type="text"
-            name="bloodPressure"
-            value={formData.bloodPressure}
-            onChange={handleChange}
-            placeholder="e.g. 120/80"
-            className="w-full rounded-xl bg-bg px-4 py-3 text-sm font-medium outline-none"
-          />
-        </div>
-
-        {/* Hemoglobin */}
-        <div>
-          <label className="mb-2 block text-sm font-bold text-gray-700">
-            Hemoglobin (g/dL)
+            Pregnancy Number
           </label>
 
           <input
             type="number"
-            name="hemoglobin"
-            min="0"
-            step="0.1"
-            value={formData.hemoglobin}
+            name="pregnancyNumber"
+            min="1"
+            value={formData.pregnancyNumber}
             onChange={handleChange}
-            placeholder="e.g. 11.5"
+            placeholder="e.g. 1"
             className="w-full rounded-xl bg-bg px-4 py-3 text-sm font-medium outline-none"
+          />
+        </div>
+
+        {/* Previous Births */}
+        <div>
+          <label className="mb-2 block text-sm font-bold text-gray-700">
+            Previous Births
+          </label>
+
+          <input
+            type="number"
+            name="previousBirths"
+            min="0"
+            value={formData.previousBirths}
+            onChange={handleChange}
+            placeholder="e.g. 0"
+            className="w-full rounded-xl bg-bg px-4 py-3 text-sm font-medium outline-none"
+          />
+        </div>
+
+        {/* Notes */}
+        <div className="sm:col-span-2">
+          <label className="mb-2 block text-sm font-bold text-gray-700">
+            Notes
+          </label>
+
+          <textarea
+            name="notes"
+            value={formData.notes}
+            onChange={handleChange}
+            rows="4"
+            placeholder="Add any pregnancy-related notes..."
+            className="w-full resize-none rounded-xl bg-bg px-4 py-3 text-sm font-medium outline-none"
           />
         </div>
       </div>
@@ -140,4 +131,4 @@ const EditHealthForm = ({
   );
 };
 
-export default EditHealthForm;
+export default EditPregnancyForm;

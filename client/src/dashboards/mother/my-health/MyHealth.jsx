@@ -5,7 +5,6 @@ import {
   Scale,
   Activity,
   Droplets,
-  CalendarDays,
   Pencil,
 } from "lucide-react";
 
@@ -22,9 +21,6 @@ const MyHealth = () => {
   const [success, setSuccess] = useState("");
 
   const [formData, setFormData] = useState({
-    isPregnant: false,
-    pregnancyWeek: "",
-    expectedDeliveryDate: "",
     bloodGroup: "",
     weight: "",
     bloodPressure: "",
@@ -60,11 +56,6 @@ const MyHealth = () => {
     setError("");
 
     setFormData({
-      isPregnant: health.isPregnant || false,
-      pregnancyWeek: health.pregnancyWeek || "",
-      expectedDeliveryDate: health.expectedDeliveryDate
-        ? health.expectedDeliveryDate.split("T")[0]
-        : "",
       bloodGroup: health.bloodGroup || "",
       weight: health.weight || "",
       bloodPressure: health.bloodPressure || "",
@@ -92,14 +83,6 @@ const MyHealth = () => {
       setError("");
 
       const response = await api.put("/mother-health", {
-        isPregnant: formData.isPregnant,
-
-        pregnancyWeek: formData.pregnancyWeek
-          ? Number(formData.pregnancyWeek)
-          : null,
-
-        expectedDeliveryDate: formData.expectedDeliveryDate || null,
-
         bloodGroup: formData.bloodGroup,
 
         weight: formData.weight ? Number(formData.weight) : null,
@@ -195,33 +178,6 @@ const MyHealth = () => {
         />
       ) : (
         <>
-          {/* Pregnancy Status */}
-          <div className={`rounded-2xl p-5 shadow-sm sm:p-6 ${health.isPregnant ? "bg-pink-50" : "bg-bg"}`}>
-            <div className="flex items-start gap-4">
-              <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white ${health.isPregnant ? "text-pink-500" : "text-primary"}`}>
-                <HeartPulse size={23} />
-              </div>
-
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  Pregnancy Status
-                </p>
-
-                <h2 className={`mt-1 text-xl font-bold ${health.isPregnant ? "text-pink-500" : "text-primary"}`}>
-                  {health.isPregnant ? "Currently Pregnant" : "Not Pregnant"}
-                </h2>
-
-                {health.isPregnant && health.pregnancyWeek && (
-                  <p className="mt-1 text-sm font-medium text-gray-500">
-                    Pregnancy Week:{" "}
-                    <span className="font-semibold text-pink-500">
-                      {health.pregnancyWeek}
-                    </span>
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
 
           {/* Health Overview */}
           <div>
@@ -233,7 +189,9 @@ const MyHealth = () => {
               {/* Blood Group */}
               <div className="rounded-2xl bg-bg p-5 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-gray-500">Blood Group</p>
+                  <p className="text-sm font-semibold text-gray-500">
+                    Blood Group
+                  </p>
 
                   <Droplets size={20} className="text-[#00656B]" />
                 </div>
@@ -259,7 +217,9 @@ const MyHealth = () => {
               {/* Blood Pressure */}
               <div className="rounded-2xl bg-bg p-5 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-gray-500">Blood Pressure</p>
+                  <p className="text-sm font-semibold text-gray-500">
+                    Blood Pressure
+                  </p>
 
                   <Activity size={20} className="text-[#00656B]" />
                 </div>
@@ -272,7 +232,9 @@ const MyHealth = () => {
               {/* Hemoglobin */}
               <div className="rounded-2xl bg-bg p-5 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-gray-500">Hemoglobin</p>
+                  <p className="text-sm font-semibold text-gray-500">
+                    Hemoglobin
+                  </p>
 
                   <HeartPulse size={20} className="text-[#00656B]" />
                 </div>
@@ -283,35 +245,6 @@ const MyHealth = () => {
               </div>
             </div>
           </div>
-
-          {/* Expected Delivery */}
-          {health.isPregnant && (
-            <div className="rounded-2xl bg-bg p-5 shadow-sm sm:p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F5F5] text-[#00656B]">
-                  <CalendarDays size={21} />
-                </div>
-
-                <div>
-                  <p className="text-sm text-gray-500">
-                    Expected Delivery Date
-                  </p>
-
-                  <p className="mt-1 font-semibold text-gray-800">
-                    {health.expectedDeliveryDate
-                      ? new Date(
-                          health.expectedDeliveryDate,
-                        ).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </>
       )}
     </div>

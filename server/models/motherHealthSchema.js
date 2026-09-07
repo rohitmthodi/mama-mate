@@ -9,23 +9,6 @@ const motherHealthSchema = new mongoose.Schema(
       unique: true,
     },
 
-    isPregnant: {
-      type: Boolean,
-      default: false,
-    },
-
-    pregnancyWeek: {
-      type: Number,
-      min: 1,
-      max: 45,
-      default: null,
-    },
-
-    expectedDeliveryDate: {
-      type: Date,
-      default: null,
-    },
-
     bloodGroup: {
       type: String,
       default: "",
