@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, ArrowRight } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/authContext";
 import { loginUser } from "../../services/authService";
+import { getRoleHome } from "../../config/roles";
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -29,50 +30,32 @@ const LoginForm = () => {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  setError("");
+    setError("");
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const response = await loginUser(formData);
+      const response = await loginUser(formData);
 
-    login(response.user, response.token);
+      const dashboardPath = getRoleHome(response.user.role);
 
-    switch (response.user.role) {
-      case "mother":
-        navigate("/mother/dashboard");
-        break;
-
-      case "admin":
-        navigate("/admin/dashboard");
-        break;
-
-      case "panchayat":
-        navigate("/panchayat/dashboard");
-        break;
-
-      case "hospital":
-        navigate("/hospital/dashboard");
-        break;
-
-      case "asha":
-        navigate("/asha/dashboard");
-        break;
-
-      default:
+      if (dashboardPath === "/unauthorized") {
         setError("Invalid user role");
+        return;
+      }
+
+      login(response.user, response.token);
+
+      navigate(dashboardPath);
+    } catch (error) {
+      setError(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    setError(
-      error.response?.data?.message || "Login failed",
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="flex w-full items-center justify-center bg-white px-6 py-10 sm:px-10 lg:w-1/2 lg:px-12 xl:px-20 cursor-default">

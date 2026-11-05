@@ -6,6 +6,7 @@ import {
   MapPin,
   LockKeyhole,
   Eye,
+  EyeOff,
   ChevronDown,
   ShieldCheck,
   ArrowRight,
@@ -27,6 +28,8 @@ const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -247,7 +250,7 @@ const RegisterForm = () => {
                 />
 
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -257,9 +260,10 @@ const RegisterForm = () => {
 
                 <button
                   type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary outline-none cursor-pointer"
                 >
-                  <Eye size={16} />
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -277,7 +281,7 @@ const RegisterForm = () => {
                 />
 
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -286,11 +290,16 @@ const RegisterForm = () => {
                 />
 
                 <button
-  type="button"
-  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary outline-none cursor-pointer"
->
-  <Eye size={16} />
-</button>
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary outline-none cursor-pointer"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -299,6 +308,7 @@ const RegisterForm = () => {
         <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-100 bg-[#f8fbfb] px-3.5 py-3">
           <input
             type="checkbox"
+            required
             className="mt-1 h-3.5 w-3.5 cursor-pointer accent-primary"
           />
 

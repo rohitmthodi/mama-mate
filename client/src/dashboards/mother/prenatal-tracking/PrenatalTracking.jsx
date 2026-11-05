@@ -8,6 +8,7 @@ const PrenatalTracking = () => {
   const [prenatal, setPrenatal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notFound, setNotFound] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -26,13 +27,16 @@ const PrenatalTracking = () => {
       console.log("Prenatal API Response:", response.data);
 
       setPrenatal(response.data.prenatal);
+      setNotFound(false);
       setError("");
     } catch (error) {
       console.error("Fetch Prenatal Error:", error);
 
       if (error.response?.status === 404) {
-        setError("No active pregnancy record found.");
+        setNotFound(true);
+        setError("");
       } else {
+        setNotFound(false);
         setError("Unable to load your prenatal information.");
       }
     } finally {
@@ -41,22 +45,29 @@ const PrenatalTracking = () => {
   };
 
   useEffect(() => {
-    fetchPrenatalTracking();
+    void (async () => {
+      await fetchPrenatalTracking();
+    })();
   }, []);
 
   const handleEdit = () => {
     setError("");
 
     setFormData({
-      lastMenstrualPeriod: prenatal.lastMenstrualPeriod
+      lastMenstrualPeriod: prenatal?.lastMenstrualPeriod
         ? prenatal.lastMenstrualPeriod.split("T")[0]
         : "",
-      pregnancyNumber: prenatal.pregnancyNumber || "",
-      previousBirths: prenatal.previousBirths ?? "",
-      notes: prenatal.notes || "",
+      pregnancyNumber: prenatal?.pregnancyNumber || "",
+      previousBirths: prenatal?.previousBirths ?? "",
+      notes: prenatal?.notes || "",
     });
 
     setIsEditing(true);
+  };
+
+  const closeEdit = () => {
+    setError("");
+    setIsEditing(false);
   };
 
   const handleChange = (e) => {
@@ -75,7 +86,7 @@ const PrenatalTracking = () => {
       setSaving(true);
       setError("");
 
-      const response = await api.put("/pregnancy", {
+      await api.put("/pregnancy", {
         lastMenstrualPeriod: formData.lastMenstrualPeriod,
 
         pregnancyNumber: Number(formData.pregnancyNumber),
@@ -87,23 +98,7 @@ const PrenatalTracking = () => {
         notes: formData.notes,
       });
 
-      console.log("Pregnancy Update Response:", response.data);
-
-      const updatedPregnancy = response.data.pregnancy;
-
-      setPrenatal((prev) => ({
-        ...prev,
-
-        lastMenstrualPeriod: updatedPregnancy.lastMenstrualPeriod,
-
-        expectedDeliveryDate: updatedPregnancy.expectedDeliveryDate,
-
-        pregnancyNumber: updatedPregnancy.pregnancyNumber,
-
-        previousBirths: updatedPregnancy.previousBirths,
-
-        notes: updatedPregnancy.notes,
-      }));
+      await fetchPrenatalTracking();
 
       setIsEditing(false);
     } catch (error) {
@@ -161,7 +156,7 @@ const PrenatalTracking = () => {
     );
   }
 
-  if (error && !isEditing) {
+  if (notFound && !isEditing) {
     return (
       <div className="space-y-6">
         <div>
@@ -211,15 +206,51 @@ const PrenatalTracking = () => {
     );
   }
 
+  if (error && !isEditing) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+            Prenatal Tracking
+          </h1>
+
+          <p className="mt-2 text-sm font-medium text-gray-500">
+            Track your pregnancy progress and important dates.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border bg-white p-8 text-center shadow-sm">
+          <h2 className="text-lg font-bold text-gray-800">{error}</h2>
+
+          <p className="mt-2 text-sm font-medium text-gray-500">
+            Please try again in a moment.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true);
+              fetchPrenatalTracking();
+            }}
+            className="mt-6 cursor-pointer rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-secondary"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (isEditing) {
     return (
       <EditPregnancyForm
         formData={formData}
         error={error}
         saving={saving}
+        isCreating={!prenatal}
         handleChange={handleChange}
         handleUpdate={prenatal ? handleUpdate : handleCreate}
-        setIsEditing={setIsEditing}
+        setIsEditing={closeEdit}
       />
     );
   }

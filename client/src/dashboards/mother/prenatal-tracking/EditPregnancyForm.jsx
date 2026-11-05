@@ -4,6 +4,7 @@ const EditPregnancyForm = ({
   formData,
   error,
   saving,
+  isCreating,
   handleChange,
   handleUpdate,
   setIsEditing,
@@ -17,11 +18,15 @@ const EditPregnancyForm = ({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-gray-800">
-            Edit Pregnancy Information
+            {isCreating
+              ? "Add Pregnancy Information"
+              : "Edit Pregnancy Information"}
           </h2>
 
           <p className="mt-1 text-sm font-medium text-gray-500">
-            Update your pregnancy information.
+            {isCreating
+              ? "Add your pregnancy information."
+              : "Update your pregnancy information."}
           </p>
         </div>
 

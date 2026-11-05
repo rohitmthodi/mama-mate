@@ -1,6 +1,6 @@
 import { CalendarDays, HeartPulse, FileText, ArrowRight } from "lucide-react";
 
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/authContext";
 
 const MotherDashboard = () => {
   const { user } = useAuth();

@@ -35,8 +35,11 @@ export const registerMother = async (req, res) => {
       });
     }
 
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const normalizedMobile = String(mobile).trim();
+
     // 3. Check existing email
-    const existingEmail = await User.findOne({ email });
+    const existingEmail = await User.findOne({ email: normalizedEmail });
 
     if (existingEmail) {
       return res.status(409).json({
@@ -45,7 +48,7 @@ export const registerMother = async (req, res) => {
     }
 
     // 4. Check existing mobile
-    const existingMobile = await User.findOne({ mobile });
+    const existingMobile = await User.findOne({ mobile: normalizedMobile });
 
     if (existingMobile) {
       return res.status(409).json({
@@ -60,8 +63,8 @@ export const registerMother = async (req, res) => {
     const user = await User.create({
       firstName,
       lastName,
-      email,
-      mobile,
+      email: normalizedEmail,
+      mobile: normalizedMobile,
       panchayat,
       password: hashedPassword,
       role: "mother",
@@ -83,6 +86,12 @@ export const registerMother = async (req, res) => {
   } catch (error) {
     console.error("Register Mother Error:", error);
 
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "Email or mobile number already registered",
+      });
+    }
+
     return res.status(500).json({
       message: "Server error",
     });
@@ -101,7 +110,9 @@ export const loginUser = async (req, res) => {
     }
 
     // 2. Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      email: String(email).trim().toLowerCase(),
+    });
 
     if (!user) {
       return res.status(401).json({
@@ -125,7 +136,6 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // 5. Login successful
     // 5. Generate JWT
     const token = generateToken(user);
 

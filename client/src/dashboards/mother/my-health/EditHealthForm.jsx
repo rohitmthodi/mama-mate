@@ -4,6 +4,7 @@ const EditHealthForm = ({
   formData,
   error,
   saving,
+  isCreating,
   handleChange,
   handleUpdate,
   setIsEditing,
@@ -16,11 +17,13 @@ const EditHealthForm = ({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-gray-800">
-            Edit Health Information
+            {isCreating ? "Add Health Information" : "Edit Health Information"}
           </h2>
 
           <p className="mt-1 text-sm font-medium text-gray-500">
-            Update your current health information.
+            {isCreating
+              ? "Add your current health information."
+              : "Update your current health information."}
           </p>
         </div>
 

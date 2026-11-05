@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Immunizations = () => {
   return (
     <div className="flex min-h-160 flex-col items-center justify-center px-6 text-center bg-bg rounded-xl">

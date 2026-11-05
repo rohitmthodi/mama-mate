@@ -15,6 +15,7 @@ const MyHealth = () => {
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notFound, setNotFound] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -35,12 +36,16 @@ const MyHealth = () => {
         console.log("Mother Health API Response:", response.data);
 
         setHealth(response.data.health);
+        setNotFound(false);
+        setError("");
       } catch (error) {
         console.error("Fetch Health Error:", error);
 
         if (error.response?.status === 404) {
-          setError("No health record found.");
+          setNotFound(true);
+          setError("");
         } else {
+          setNotFound(false);
           setError("Unable to load your health information.");
         }
       } finally {
@@ -56,13 +61,18 @@ const MyHealth = () => {
     setError("");
 
     setFormData({
-      bloodGroup: health.bloodGroup || "",
-      weight: health.weight || "",
-      bloodPressure: health.bloodPressure || "",
-      hemoglobin: health.hemoglobin || "",
+      bloodGroup: health?.bloodGroup || "",
+      weight: health?.weight || "",
+      bloodPressure: health?.bloodPressure || "",
+      hemoglobin: health?.hemoglobin || "",
     });
 
     setIsEditing(true);
+  };
+
+  const closeEdit = () => {
+    setError("");
+    setIsEditing(false);
   };
 
   const handleChange = (e) => {
@@ -82,7 +92,7 @@ const MyHealth = () => {
       setSuccess("");
       setError("");
 
-      const response = await api.put("/mother-health", {
+      const payload = {
         bloodGroup: formData.bloodGroup,
 
         weight: formData.weight ? Number(formData.weight) : null,
@@ -90,11 +100,20 @@ const MyHealth = () => {
         bloodPressure: formData.bloodPressure,
 
         hemoglobin: formData.hemoglobin ? Number(formData.hemoglobin) : null,
-      });
+      };
+
+      const response = notFound
+        ? await api.post("/mother-health", payload)
+        : await api.put("/mother-health", payload);
 
       setHealth(response.data.health);
+      setNotFound(false);
 
-      setSuccess("Health information updated successfully.");
+      setSuccess(
+        notFound
+          ? "Health information added successfully."
+          : "Health information updated successfully.",
+      );
 
       setIsEditing(false);
     } catch (error) {
@@ -129,6 +148,43 @@ const MyHealth = () => {
         <p className="mt-1 font-medium text-gray-500">
           Your health information will appear here once it is available.
         </p>
+      </div>
+    );
+  }
+
+  if (notFound && !isEditing) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+            My Health
+          </h1>
+
+          <p className="mt-1 text-sm font-medium text-gray-500">
+            View and manage your maternal health information.
+          </p>
+        </div>
+
+        <div className="rounded-2xl bg-bg p-8 text-center shadow-sm">
+          <Ghost size={40} className="mx-auto text-[#00656B]" />
+
+          <h2 className="mt-4 text-lg font-bold text-gray-800">
+            No health record found.
+          </h2>
+
+          <p className="mt-1 font-medium text-gray-500">
+            Add your health information to get started.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleEdit}
+            className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-secondary"
+          >
+            <Pencil size={17} />
+            Add Health Information
+          </button>
+        </div>
       </div>
     );
   }
@@ -172,9 +228,10 @@ const MyHealth = () => {
           formData={formData}
           error={error}
           saving={saving}
+          isCreating={!health}
           handleChange={handleChange}
           handleUpdate={handleUpdate}
-          setIsEditing={setIsEditing}
+          setIsEditing={closeEdit}
         />
       ) : (
         <>

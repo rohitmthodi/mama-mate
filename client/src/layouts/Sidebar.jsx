@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { X } from "lucide-react";
 
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 import navigation from "../config/navigation";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
@@ -43,7 +43,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </h1>
 
               <p className="text-xs font-extrabold text-gray-500 uppercase tracking-[1px]">
-                {user.role} PORTAL
+                {user?.role} PORTAL
               </p>
             </div>
           </div>

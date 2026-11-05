@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import LandingPage from "./components/landing-page/LandingPage";
 import RoleSelection from "./components/role-section/RoleSection";
@@ -20,6 +20,11 @@ import PrenatalTracking from "./dashboards/mother/prenatal-tracking/PrenatalTrac
 import Immunizations from "./dashboards/mother/Immunizations";
 import Exercises from "./dashboards/mother/Exercises";
 import Complaints from "./dashboards/mother/Complaints";
+
+import navigation from "./config/navigation";
+import { OFFICIAL_ROLES } from "./config/roles";
+import OfficialDashboard from "./dashboards/official/OfficialDashboard";
+import PlaceholderPage from "./pages/PlaceholderPage";
 
 const App = () => {
   return (
@@ -46,8 +51,40 @@ const App = () => {
             <Route path="/mother/exercises" element={<Exercises />} />
             <Route path="/mother/complaints" element={<Complaints />} />
           </Route>
+
+          {/* Official Routes */}
+          {OFFICIAL_ROLES.map((role) => {
+            const [dashboard, ...modules] = navigation[role];
+
+            return (
+              <Route
+                key={role}
+                element={<RoleRoute allowedRoles={[role]} />}
+              >
+                <Route
+                  path={dashboard.path}
+                  element={<OfficialDashboard />}
+                />
+
+                {modules.map((item) => (
+                  <Route
+                    key={item.path}
+                    path={item.path}
+                    element={
+                      <PlaceholderPage
+                        title={item.label}
+                        description={`The ${item.label} section for the ${role} portal is coming soon.`}
+                      />
+                    }
+                  />
+                ))}
+              </Route>
+            );
+          })}
         </Route>
       </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

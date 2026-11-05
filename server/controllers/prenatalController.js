@@ -31,8 +31,8 @@ export const getPrenatalTracking = async (req, res) => {
       Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24)),
     );
 
-    const pregnancyWeek = Math.floor(totalDays / 7);
-    const remainingDays = totalDays % 7;
+    const pregnancyWeek = Math.min(40, Math.floor(totalDays / 7));
+    const remainingDays = pregnancyWeek >= 40 ? 0 : totalDays % 7;
 
     return res.status(200).json({
       message: "Prenatal tracking fetched successfully",

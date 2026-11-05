@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Baby, ArrowRight } from "lucide-react";
 

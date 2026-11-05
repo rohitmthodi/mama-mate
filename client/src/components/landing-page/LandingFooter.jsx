@@ -1,4 +1,3 @@
-import React from "react";
 import { HeartPulse, Handshake, Baby } from "lucide-react";
 
 const LandingFooter = () => {

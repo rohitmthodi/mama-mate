@@ -1,4 +1,3 @@
-import React from "react";
 import LandingHero from "./LandingHero";
 import LandingFooter from "./LandingFooter";
 

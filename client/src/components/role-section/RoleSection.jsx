@@ -1,4 +1,3 @@
-import React from "react";
 import { HeartPulse } from "lucide-react";
 
 import MotherAccessCard from "./MotherAccessCard";
